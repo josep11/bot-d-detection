@@ -1,0 +1,26 @@
+name: Build and Deploy
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3.0.2
+
+      - name: Install and Build 🔧
+        run: |
+          npm install
+          npm run-script build
+        env:
+          # THE env variables need to begin with "REACT_APP"
+          NODE_ENV: production
+          REACT_APP_BOT_D_API_KEY: ${{ secrets.REACT_APP_BOT_D_API_KEY }}
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: build
